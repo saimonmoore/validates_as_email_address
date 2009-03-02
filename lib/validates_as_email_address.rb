@@ -46,7 +46,7 @@ module ValidatesAsEmailAddress
   def validates_as_email_address(*attr_names)
     configuration = attr_names.last.is_a?(Hash) ? attr_names.pop : {}
     configuration.reverse_merge!(
-      :wrong_format => ActiveRecord::Errors.default_error_messages[:invalid_email],
+      :wrong_format => I18n.translate('activerecord.errors.messages.invalid_email'),
       :strict => true
     )
     
