@@ -66,8 +66,3 @@ end
 ActiveRecord::Base.class_eval do
   extend ValidatesAsEmailAddress
 end
-
-# Add error messages specific to this validation
-ActiveRecord::Errors.default_error_messages.update(
-  :invalid_email => 'is an invalid email address'
-)
