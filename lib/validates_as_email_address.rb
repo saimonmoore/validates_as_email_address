@@ -45,10 +45,17 @@ module ValidatesAsEmailAddress
   #   '-online.com', '[127.0.0.1]' become valid.
   def validates_as_email_address(*attr_names)
     configuration = attr_names.last.is_a?(Hash) ? attr_names.pop : {}
-    configuration.reverse_merge!(
-      :wrong_format => I18n.translate('activerecord.errors.messages.invalid_email'),
-      :strict => true
-    )
+    if Object.const_defined?(:I18n) # Rails >= 2.2
+      configuration.reverse_merge!(
+        :wrong_format => I18n.translate('activerecord.errors.messages.invalid_email'),
+        :strict => true
+      )      
+    else
+      configuration.reverse_merge!(
+        :wrong_format => ActiveRecord::Errors.default_error_messages[:invalid_email]
+        :strict => true
+      )
+    end
     
     # Add format validation
     format_configuration = configuration.dup
@@ -65,4 +72,11 @@ end
 
 ActiveRecord::Base.class_eval do
   extend ValidatesAsEmailAddress
+end
+
+unless Object.const_defined?(:I18n) # Rails >= 2.2
+  # Add error messages specific to this validation
+  ActiveRecord::Errors.default_error_messages.update(
+    :invalid_email => 'is an invalid email address'
+  )  
 end
