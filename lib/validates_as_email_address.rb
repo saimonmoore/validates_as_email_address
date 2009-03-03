@@ -52,7 +52,7 @@ module ValidatesAsEmailAddress
       )      
     else
       configuration.reverse_merge!(
-        :wrong_format => ActiveRecord::Errors.default_error_messages[:invalid_email]
+        :wrong_format => ActiveRecord::Errors.default_error_messages[:invalid_email],
         :strict => true
       )
     end
